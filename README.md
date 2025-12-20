@@ -1,25 +1,53 @@
-# Blood-Sewa (PHP + MySQL)
+🩸 BloodSewa
 
-This repository has been converted to a minimal PHP + MySQL project (HTML/CSS/JS + PHP APIs).
+Peer-to-Peer Blood Donation & Emergency Connection Platform
 
-How to run (development):
+📌 Overview
 
-1. Create a MySQL database and import `schema.sql`:
+BloodSewa is a customer-to-customer (C2C) blood donation website designed to directly connect blood donors with patients or hospitals in need. The platform reduces delays caused by intermediaries and enables faster, community-driven responses during medical emergencies.
 
-```sh
-mysql -u root -p your_database < schema.sql
-```
+The system allows users to register either as a donor or recipient, search for compatible blood groups, and initiate contact instantly.
 
-2. Edit `api/config.php` and set `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`.
+🎯 Objectives
 
-3. Start PHP built-in server from repository root:
+Enable fast and direct blood donor–recipient connections
 
-```sh
-php -S localhost:8000
-```
+Reduce dependency on centralized blood banks during emergencies
 
-4. Open `http://localhost:8000`.
+Promote voluntary blood donation using technology
 
-Notes:
-- The API endpoints are under `/api/*.php` and return JSON.
-- Login uses PHP sessions; fetch calls include credentials.
+Provide an easy-to-use, accessible platform for all users
+
+🧑‍🤝‍🧑 Target Users
+
+Blood donors
+
+Patients and patient families
+
+Hospitals and medical centers
+
+Emergency responders
+
+⚙️ Features
+
+User registration and authentication
+
+Blood group–based donor search
+
+Location-based filtering
+
+Emergency request posting
+
+Direct donor–recipient contact system
+
+Responsive UI for mobile and desktop
+
+🛠️ Tech Stack
+
+Frontend: HTML5, Tailwind CSS, Vanilla JavaScript
+
+Backend: PHP
+
+Database: MySQL
+
+Server: PHP built-in server / XAMPP / Apache
