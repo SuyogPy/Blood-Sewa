@@ -70,6 +70,14 @@ ul#results a{ text-decoration:none; color:var(--ink); font-weight:600 }
 /* Profile pre styling */
 pre#profile{ background: linear-gradient(180deg,var(--white), #fff9f9); padding:16px; border-radius:8px; color:var(--ink); border:1px solid rgba(44,62,80,0.04) }
 
+/* Profile card */
+.profile-card-inner{ padding:14px; background: linear-gradient(180deg,var(--white), #fffaf8); border-radius:10px; border:1px solid rgba(44,62,80,0.04); }
+.profile-row{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; align-items:center; border-bottom:1px dashed rgba(44,62,80,0.03) }
+.profile-row:last-child{ border-bottom:none }
+.profile-value{ color:rgba(44,62,80,0.85); font-weight:600 }
+.profile-actions{ margin-top:12px; display:flex; gap:10px }
+
+
 /* Header/footer compact */
 footer .container{ display:flex; align-items:center; justify-content:space-between }
 

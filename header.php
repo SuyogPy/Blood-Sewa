@@ -15,9 +15,14 @@
 
     <div style="margin-left:auto; display:flex; gap:12px; align-items:center;">
       <a href="register.php" class="btn btn-primary">Donate Now</a>
-      <button id="emergencyBtn" class="btn" aria-label="Emergency contacts">
+      <?php if (!empty($_SESSION['user_id'])): ?>
+        <a href="profile.php" class="nav-link" style="font-weight:800">My Profile</a>
+      <?php else: ?>
+        <a href="login.php" class="nav-link" style="font-weight:800">Login</a>
+      <?php endif; ?>
+      <button id="emergencyBtn" class="emergency-btn" aria-label="Emergency contacts">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span style="font-weight:700; color:var(--primary); margin-left:4px">Emergency</span>
+        <span style="font-weight:700; margin-left:8px">Emergency</span>
       </button>
     </div>
   </div>
