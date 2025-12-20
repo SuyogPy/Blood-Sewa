@@ -40,7 +40,7 @@
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-card">
           <div style="display:flex; align-items:center; gap:10px; justify-content:center; flex-direction:column;">
-            <div class="hero-logo"><img src="assets/logo.jpeg" alt="BloodSewa logo"></div>
+            <div class="hero-logo"><img src="assets/logo.jpg" alt="BloodSewa logo"></div>
             <div class="live-stats"><span class="live-pulse" aria-hidden="true"></span>+1,240 Donors Registered</div>
             <h1 id="hero-heading" class="shimmer">Your Blood Can Save Three Lives</h1>
             <p class="lead">BloodSewa connects verified donors with patients in urgent need. Fast, secure, and community-powered — register now and be a lifesaver.</p>
@@ -131,11 +131,5 @@
   </footer>
 
   <script src="assets/app.js"></script>
-  <script>
-    document.getElementById('emergencyBtn')?.addEventListener('click', ()=>{
-      const confirmMsg = 'In case of emergency call local services immediately.\nDo you want to view quick emergency numbers?';
-      if (!confirm(confirmMsg)) return; alert('Emergency contacts:\n• Local Hospital: 102\n• Ambulance: 108\n• Blood Bank: Contact donors from search results');
-    });
-  </script>
 </body>
 </html>
