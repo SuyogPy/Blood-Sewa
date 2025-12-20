@@ -10,10 +10,10 @@ $dbName = DB_NAME;
 
 try {
     // Connect without database to create it if missing
-    $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+    $pdo = new PDO("mysql:host=$host;port=" . DB_PORT . ";charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
     $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     // connect to the database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbName;charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+    $pdo = new PDO("mysql:host=$host;port=" . DB_PORT . ";dbname=$dbName;charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
 
     // create users table
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (

@@ -4,7 +4,7 @@
     <a href="index.php" class="brand brand-link">
       <img src="assets/logo.jpg" alt="BloodSewa logo" class="logo" onerror="this.style.display='none'" />
       <div class="brand-text">
-        <span class="brand-title">BloodSewa</span>
+        <span class="brand-title">BloodSewa </span>
       </div>
     </a>
     <nav class="main-nav" aria-label="Main nav">
