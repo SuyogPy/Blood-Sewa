@@ -35,7 +35,7 @@
                   <div class="check-badge" aria-hidden="true">✔</div>
                 </div>
                 <div class="feature-desc feature-verify">We verify donor identities and contact details before listing — basic checks include email verification, phone confirmation, and profile review. This reduces risk and increases trust between donors and recipients.</div>
-                <div class="mt-8"><a href="about.php" class="btn btn-outline">How we verify</a></div>
+                
               </div>
             </div>
 
