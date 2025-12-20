@@ -13,7 +13,7 @@
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-card">
           <div style="display:flex; align-items:center; gap:8px; flex-direction:column;">
-            <div class="hero-logo"><img src="assets/logo.jpeg" alt="BloodSewa logo"></div>
+            <div class="hero-logo"><img src="assets/logo.jpg" alt="BloodSewa logo"></div>
             <h1 id="hero-heading" class="shimmer">Donor Details</h1>
             <p class="lead">Contact details and basic profile information for the selected donor.</p>
           </div>
