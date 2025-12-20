@@ -101,6 +101,10 @@ input,textarea,select{width:100%;padding:10px 12px;border-radius:10px;border:1px
 /* Utilities */
 .muted{color:var(--subtle)}
 .shimmer{position:relative;display:inline-block;overflow:hidden}
+
+/* Safe & Verified badge and description */
+.feature-verify{color:var(--subtle);margin-top:6px}
+.check-badge{background:rgba(34,197,94,0.12);color:#16a34a;border-radius:6px;padding:4px 6px;font-weight:800;font-size:0.85rem}
 .shimmer::after{content:'';position:absolute;left:-120%;top:0;height:100%;width:120%;background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.6), rgba(255,255,255,0));transform:skewX(-20deg);animation:shimmer 2.4s infinite}
 @keyframes shimmer{to{left:120%}}
 

@@ -19,8 +19,8 @@
             <p class="lead">Join BloodSewa — a student-led initiative connecting compassionate donors with people in urgent need. Register as a donor and make a real impact today.</p>
 
             <div style="margin-top:26px; display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap">
-              <a class="cta-large" href="register.php">Register as Donor</a>
-              <a class="cta-outline" href="search.php">🔍 Search Donors</a>
+              <a class="btn btn-primary" href="register.php">Register as Donor</a>
+              <a class="btn btn-outline" href="search.php">🔍 Search Donors</a>
             </div>
           </div>
 
@@ -30,8 +30,12 @@
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v5c0 5-3.5 9-7 11-3.5-2-7-6-7-11V6l7-4z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <div>
-                <div class="feature-title">Safe & Verified</div>
-                <div class="feature-desc">Verification reduces risk and increases trust between donors and recipients.</div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="feature-title">Safe & Verified</div>
+                  <div class="check-badge" aria-hidden="true">✔</div>
+                </div>
+                <div class="feature-desc feature-verify">We verify donor identities and contact details before listing — basic checks include email verification, phone confirmation, and profile review. This reduces risk and increases trust between donors and recipients.</div>
+                <div class="mt-8"><a href="about.php" class="btn btn-outline">How we verify</a></div>
               </div>
             </div>
 

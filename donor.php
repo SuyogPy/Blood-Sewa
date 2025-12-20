@@ -36,11 +36,25 @@
     const json = await res.json();
     if (json.donor) {
       const d = json.donor;
-      document.getElementById('donor').innerHTML = `
-        <strong>${d.name}</strong> — ${d.blood_group}<br>
-        City: ${d.city || '-'}<br>
-        Phone: ${d.phone || '-'}<br>
-        Email: <a href="mailto:${d.email}">${d.email}</a>
+      const mount = document.getElementById('donor');
+      function esc(s){ return (s||'').toString().replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+      mount.innerHTML = `
+        <div class="card donor-card">
+          <div class="donor-meta">
+            <div>
+              <div class="donor-name">${esc(d.name)} <span class="donor-badge">${esc(d.blood_group||'')}</span></div>
+              <div class="donor-sub">${esc(d.city||'-')}</div>
+            </div>
+            <div style="text-align:right">
+              <a class="btn btn-outline" href="tel:${esc(d.phone||'')}">Call</a>
+              <a class="btn btn-primary" href="mailto:${esc(d.email||'')}">Email</a>
+            </div>
+          </div>
+          <div style="margin-top:10px;"> 
+            <strong>Phone:</strong> ${esc(d.phone||'-')}<br>
+            <strong>Email:</strong> <a href="mailto:${esc(d.email||'')}">${esc(d.email||'-')}</a>
+          </div>
+        </div>
       `;
     } else {
       document.getElementById('donor').textContent = JSON.stringify(json);
