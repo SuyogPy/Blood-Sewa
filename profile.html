@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile - Blood Sewa</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <main class="container">
+    <h2>My Profile</h2>
+    <button id="logoutBtn" style="float:right;">Logout</button>
+    <pre id="profile">Loading...</pre>
+  </main>
+  <script src="assets/app.js"></script>
+  <script>
+  (async ()=>{
+    document.getElementById('logoutBtn').addEventListener('click', async ()=>{
+      await fetch('api/logout.php', { method: 'POST', credentials: 'include' });
+      window.location.href = 'index.php';
+    });
+    const res = await fetch('api/profile.php', { credentials: 'include' });
+    if (res.status === 401) {
+      document.getElementById('profile').textContent = 'Not logged in. Go to login.';
+      return;
+    }
+    const json = await res.json();
+    if (json.user) document.getElementById('profile').textContent = JSON.stringify(json.user, null, 2);
+    else document.getElementById('profile').textContent = JSON.stringify(json);
+  })();
+  </script>
+</body>
+</html>
