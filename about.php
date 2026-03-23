@@ -1,3 +1,12 @@
+<?php
+// =============================================
+// about.php - About Us Page
+// =============================================
+// This page displays information about the
+// Blood Sewa project and the team behind it.
+// This is a static page with no database queries.
+// =============================================
+?>
 <?php include 'header.php'; ?>
 <!doctype html>
 <html lang="en">
@@ -32,12 +41,12 @@
 
       <h3>Built By Students</h3>
       <p>This system is an academic project demonstrating full-stack design principles adapted to a PHP + MySQL environment, with attention to accessibility and mobile-friendly behavior.</p>
-      
-        <h3>Contact</h3>
-        <p>For queries or feedback reach us at <strong>9866299930</strong> or <a href="mailto:about.nss@edu.np">about.nss@edu.np</a>.</p>
+
+      <h3>Contact</h3>
+      <p>For queries or feedback reach us at <strong>9866299930</strong> or <a href="mailto:about.nss@edu.np">about.nss@edu.np</a>.</p>
     </section>
   </main>
-  <script src="assets/app.js"></script>
-<?php include 'footer.php'; ?>
+
+  <?php include 'footer.php'; ?>
 </body>
 </html>

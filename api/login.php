@@ -1,41 +1,63 @@
 <?php
+// =============================================
+// login.php (API) - Handles User Login
+// =============================================
+// This file receives login data (email & password)
+// from the login form. It checks the database
+// to see if the user exists with matching credentials.
+// It returns JSON so the frontend JavaScript can
+// understand the response.
+// =============================================
+
+// Tell the browser we are sending JSON data
 header('Content-Type: application/json');
-require_once __DIR__ . '/db.php';
+
+// Start a session to remember logged-in user
 session_start();
 
+// Include database connection
+require_once __DIR__ . '/db.php';
+
+// ---- Step 1: Get the data sent from the form ----
+// The frontend sends data as JSON, so we read it
 $input = json_decode(file_get_contents('php://input'), true);
-if (!$input) $input = $_POST;
 
-// CSRF check
-if (empty($input['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $input['csrf_token'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid CSRF token']);
+// If JSON didn't work, try regular POST data
+if (!$input) {
+    $input = $_POST;
+}
+
+// Store email and password in variables
+$email = $input['email'];
+$password = $input['password'];
+
+// ---- Step 2: Basic Validation ----
+// Check if email or password is empty
+if (empty($email) || empty($password)) {
+    echo json_encode(['error' => 'Email and password are required']);
     exit;
 }
 
-$email = strtolower(trim($input['email'] ?? ''));
-$password = $input['password'] ?? '';
+// ---- Step 3: Check database for matching user ----
+// Simple SQL query to find user with matching email AND password
+$sql = "SELECT * FROM users WHERE email='$email' AND password='$password' LIMIT 1";
+$result = mysqli_query($conn, $sql);
 
-if (!$email || !$password) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing credentials']);
-    exit;
-}
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid email']);
-    exit;
-}
+// ---- Step 4: Check if we found a matching user ----
+if (mysqli_num_rows($result) > 0) {
+    // User found! Get the user data
+    $user = mysqli_fetch_assoc($result);
 
-$pdo = get_db();
-$stmt = $pdo->prepare('SELECT id, password FROM users WHERE email = ? LIMIT 1');
-$stmt->execute([$email]);
-$user = $stmt->fetch();
-if (!$user || !password_verify($password, $user['password'])) {
-    http_response_code(401);
+    // Save user ID in session (to remember they are logged in)
+    $_SESSION['user_id'] = $user['id'];
+
+    // Send success response
+    echo json_encode(['ok' => true, 'id' => $user['id']]);
+} else {
+    // No matching user found
     echo json_encode(['error' => 'Invalid email or password']);
-    exit;
 }
 
-$_SESSION['user_id'] = $user['id'];
-echo json_encode(['ok' => true, 'id' => $user['id']]);
+// Close the database connection
+mysqli_close($conn);
+?>

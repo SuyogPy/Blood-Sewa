@@ -1,26 +1,55 @@
-<?php include 'header.php'; ?>
+<?php
+// =============================================
+// index.php - Home Page
+// =============================================
+// Main landing page for Blood Sewa.
+// Shows hero section with donor count from
+// database (using PHP, not JavaScript).
+// =============================================
+
+// Include database connection
+require_once 'db.php';
+
+// ---- Get total number of donors from database ----
+$donor_count = 0;
+$sql = "SELECT COUNT(*) AS total FROM users";
+$result = mysqli_query($conn, $sql);
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $donor_count = $row['total'];
+}
+
+// Close connection
+mysqli_close($conn);
+?>
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Your Blood Can Save Three Lives — BloodSewa</title>
+  <title>BloodSewa — Donate Blood. Save Lives.</title>
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
+  <?php include 'header.php'; ?>
+
   <section class="hero-outer">
     <div class="container">
       <section class="hero" aria-labelledby="hero-heading">
         <div class="hero-card">
-          <div class="hero-logo"><img src="assets/logo.jpg" alt="BloodSewa logo"></div>
           <div style="display:flex; align-items:center; gap:10px; justify-content:center; flex-direction:column;">
-            <div class="live-stats"><span class="live-pulse" aria-hidden="true"></span>+1,240 Donors Registered</div>
+            <div class="hero-logo"><img src="assets/logo.jpg" alt="BloodSewa logo"></div>
+            <!-- Show live donor count from database using PHP -->
+            <div class="live-stats">
+              <span class="live-pulse" aria-hidden="true"></span>
+              +<?php echo number_format($donor_count); ?> Donors Registered
+            </div>
             <h1 id="hero-heading" class="shimmer">Your Blood Can Save Three Lives</h1>
-            <p class="lead">Join BloodSewa — a student-led initiative connecting compassionate donors with people in urgent need. Register as a donor and make a real impact today.</p>
+            <p class="lead">BloodSewa connects verified donors with patients in urgent need. Fast, secure, and community-powered — register now and be a lifesaver.</p>
 
             <div style="margin-top:26px; display:flex; gap:14px; align-items:center; justify-content:center; flex-wrap:wrap">
-              <a class="btn btn-primary" href="register.php">Register as Donor</a>
-              <a class="btn btn-outline" href="search.php">🔍 Search Donors</a>
+              <a class="cta-large btn btn-primary" href="register.php">Register as Donor</a>
+              <a class="cta-outline btn btn-outline" href="search.php">🔍 Search Donors</a>
             </div>
           </div>
 
@@ -30,12 +59,8 @@
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 2l7 4v5c0 5-3.5 9-7 11-3.5-2-7-6-7-11V6l7-4z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </div>
               <div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <div class="feature-title">Safe & Verified</div>
-                  <div class="check-badge" aria-hidden="true">✔</div>
-                </div>
-                <div class="feature-desc feature-verify">We verify donor identities and contact details before listing — basic checks include email verification, phone confirmation, and profile review. This reduces risk and increases trust between donors and recipients.</div>
-                
+                <div class="feature-title">Safe & Verified</div>
+                <div class="feature-desc">Verification reduces risk and increases trust between donors and recipients.</div>
               </div>
             </div>
 
@@ -74,7 +99,23 @@
     </div>
   </section>
 
-  <script src="assets/app.js"></script>
-<?php include 'footer.php'; ?>
+  <main class="container" style="margin-top:0;">
+    <section style="margin-top:28px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px">
+      <div class="hero-card">
+        <h4>Safe & Verified</h4>
+        <p style="color:rgba(44,62,80,0.75)">We encourage accurate profiles and verification to keep donors and recipients safe.</p>
+      </div>
+      <div class="hero-card">
+        <h4>Community Focused</h4>
+        <p style="color:rgba(44,62,80,0.75)">Student-run initiative with transparent, community-driven operations.</p>
+      </div>
+      <div class="hero-card">
+        <h4>Fast Response</h4>
+        <p style="color:rgba(44,62,80,0.75)">Search and contact donors quickly during urgent needs.</p>
+      </div>
+    </section>
+  </main>
+
+  <?php include 'footer.php'; ?>
 </body>
 </html>

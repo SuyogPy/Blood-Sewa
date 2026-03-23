@@ -1,21 +1,21 @@
 <?php
+// =============================================
+// logout.php (API) - Log Out User
+// =============================================
+// This file destroys the user's session,
+// effectively logging them out.
+// =============================================
+
+// Tell the browser we are sending JSON data
 header('Content-Type: application/json');
+
+// Start session so we can destroy it
 session_start();
-// Optional CSRF protection for logout: accept JSON body token
-$body = json_decode(file_get_contents('php://input'), true);
-if (!empty($body)) {
-    if (empty($body['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $body['csrf_token'])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Invalid CSRF token']);
-        exit;
-    }
-}
-$_SESSION = [];
-if (ini_get('session.use_cookies')) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000,
-        $params['path'], $params['domain'], $params['secure'], $params['httponly']
-    );
-}
+
+// ---- Step 1: Destroy the session ----
+// This removes all session data
 session_destroy();
+
+// ---- Step 2: Send success response ----
 echo json_encode(['ok' => true]);
+?>

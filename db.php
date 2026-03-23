@@ -9,10 +9,10 @@
 // =============================================
 
 // Database connection details (for XAMPP)
-$server = "localhost";   // Server name (localhost for XAMPP)
-$username = "root";      // Default XAMPP username
-$password = "";          // Default XAMPP password (empty)
-$database = "blood_sewa"; // Our database name
+$server = "localhost";     // Server name (localhost for XAMPP)
+$username = "root";        // Default XAMPP username
+$password = "";            // Default XAMPP password (empty)
+$database = "blood_sewa";  // Our database name
 
 // Create connection using mysqli
 $conn = new mysqli($server, $username, $password, $database);
@@ -24,5 +24,4 @@ if ($conn->connect_error) {
 }
 
 // If we reach here, connection is successful
-// echo "Connected successfully"; // Uncomment this line to test connection
 ?>

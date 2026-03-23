@@ -1,3 +1,31 @@
+<?php
+// =============================================
+// contact.php - Contact Us Page
+// =============================================
+// This page shows contact info and a simple
+// contact form. When submitted, it shows a
+// success message (demo — does not actually
+// send an email).
+// =============================================
+
+// Variable to store message
+$message_sent = false;
+
+// ---- Check if form was submitted ----
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get form data
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+
+    // Basic validation
+    if (!empty($name) && !empty($email) && !empty($message)) {
+        // In a real project, you would send an email here
+        // For now, we just show a success message
+        $message_sent = true;
+    }
+}
+?>
 <?php include 'header.php'; ?>
 <!doctype html>
 <html lang="en">
@@ -37,25 +65,24 @@
 
         <div>
           <h4>Send a Message</h4>
-          <form id="contactForm" method="post" action="#">
+
+          <!-- Show success message -->
+          <?php if ($message_sent) { ?>
+              <p style="color: green; font-weight: bold;">Message sent successfully! We will contact you soon.</p>
+          <?php } ?>
+
+          <!-- Contact Form — submits to itself using POST -->
+          <form method="POST" action="contact.php">
             <label>Name <input name="name" required></label>
             <label>Email <input name="email" type="email" required></label>
             <label>Message <textarea name="message" rows="5" required></textarea></label>
             <button class="btn btn-primary" type="submit">Send Message</button>
-            <div id="contactMsg" style="margin-top:10px;color:var(--ink);"></div>
           </form>
         </div>
       </div>
     </section>
   </main>
-  <script src="assets/app.js"></script>
-  <script>
-    document.getElementById('contactForm').addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      document.getElementById('contactMsg').textContent = 'Message sent (demo). We will contact you soon.';
-      e.target.reset();
-    });
-  </script>
-<?php include 'footer.php'; ?>
+
+  <?php include 'footer.php'; ?>
 </body>
 </html>

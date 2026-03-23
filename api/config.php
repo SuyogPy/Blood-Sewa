@@ -1,10 +1,18 @@
 <?php
-// Copy this file and edit values for production.
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'bloodsewa'); // ok
-define('DB_USER', 'root');       // default XAMPP
-define('DB_PASS', '');           // default XAMPP
-define('DB_PORT', 3307);         // new set port
+// =============================================
+// config.php - Configuration File
+// =============================================
+// This file stores database configuration.
+// We keep these values separate so they are
+// easy to change without editing other files.
+// =============================================
 
+// Database settings for XAMPP
+$server = "localhost";     // Server name
+$username = "root";        // Default XAMPP username
+$password = "";            // Default XAMPP password
+$database = "blood_sewa";  // Database name
 
-// For production, move secrets to env or outside webroot.
+// Note: These same values are used in db.php
+// This file exists for reference purposes.
+?>
