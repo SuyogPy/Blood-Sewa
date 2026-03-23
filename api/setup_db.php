@@ -1,43 +1,79 @@
 <?php
-// Lightweight DB setup script — run once in development to create DB and tables.
-require_once __DIR__ . '/config.php';
-header('Content-Type: application/json');
+// =============================================
+// setup_db.php - Database Setup Script
+// =============================================
+// Run this file ONCE in your browser to create
+// the database and the users table.
+// URL: http://localhost/Blood-Sewa/api/setup_db.php
+// =============================================
 
-$host = DB_HOST;
-$user = DB_USER;
-$pass = DB_PASS;
-$dbName = DB_NAME;
+// Database connection details
+$server = "localhost";
+$username = "root";
+$password = "";
+$database = "blood_sewa";
 
-try {
-    // Connect without database to create it if missing
-    $pdo = new PDO("mysql:host=$host;port=" . DB_PORT . ";charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    // connect to the database
-    $pdo = new PDO("mysql:host=$host;port=" . DB_PORT . ";dbname=$dbName;charset=utf8mb4", $user, $pass, [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+// ---- Step 1: Connect to MySQL (without selecting a database) ----
+$conn = new mysqli($server, $username, $password);
 
-    // create users table
-    $pdo->exec("CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      name VARCHAR(150) NOT NULL,
-      email VARCHAR(255) NOT NULL UNIQUE,
-      password VARCHAR(255) NOT NULL,
-      phone VARCHAR(50) DEFAULT NULL,
-      city VARCHAR(100) DEFAULT NULL,
-      blood_group VARCHAR(10) DEFAULT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-    // optional seed: create a demo user if none exist
-    $stmt = $pdo->query("SELECT COUNT(*) AS c FROM users");
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if (intval($row['c']) === 0) {
-        $pw = password_hash('password', PASSWORD_DEFAULT);
-        $ins = $pdo->prepare('INSERT INTO users (name,email,password,phone,city,blood_group) VALUES (?, ?, ?, ?, ?, ?)');
-        $ins->execute(['Demo Donor','demo@bloodsewa.test',$pw,'+977-000000000','Lainchour','A+']);
-    }
-
-    echo json_encode(['ok'=>true, 'msg'=>'Database and tables created (if missing)']);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['error'=>'DB setup failed', 'detail'=> $e->getMessage()]);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
+echo "Connected to MySQL server successfully.<br>";
+
+// ---- Step 2: Create the database if it doesn't exist ----
+$sql = "CREATE DATABASE IF NOT EXISTS $database";
+if (mysqli_query($conn, $sql)) {
+    echo "Database '$database' created successfully (or already exists).<br>";
+} else {
+    die("Error creating database: " . mysqli_error($conn));
+}
+
+// ---- Step 3: Select the database ----
+mysqli_select_db($conn, $database);
+
+// ---- Step 4: Create the users table ----
+$sql = "CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(50),
+    city VARCHAR(100),
+    blood_group VARCHAR(10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+if (mysqli_query($conn, $sql)) {
+    echo "Table 'users' created successfully (or already exists).<br>";
+} else {
+    die("Error creating table: " . mysqli_error($conn));
+}
+
+// ---- Step 5: Insert sample data (only if table is empty) ----
+$check = mysqli_query($conn, "SELECT COUNT(*) AS total FROM users");
+$row = mysqli_fetch_assoc($check);
+
+if ($row['total'] == 0) {
+    // Insert demo users with plain text passwords
+    $sql = "INSERT INTO users (name, email, password, phone, city, blood_group) VALUES
+        ('Demo Donor', 'demo@bloodsewa.test', 'password', '+977-000000000', 'Lainchour', 'A+'),
+        ('Alice Singh', 'alice@example.com', 'password123', '9876543210', 'Mumbai', 'A+'),
+        ('Ravi Kumar', 'ravi@example.com', 'password123', '9123456780', 'Delhi', 'B+')";
+
+    if (mysqli_query($conn, $sql)) {
+        echo "Sample data inserted successfully.<br>";
+    } else {
+        echo "Error inserting sample data: " . mysqli_error($conn) . "<br>";
+    }
+} else {
+    echo "Table already has data. Skipping sample data.<br>";
+}
+
+echo "<br><strong>Setup complete!</strong> You can now use the application.";
+echo "<br><a href='../index.php'>Go to Homepage</a>";
+
+// Close connection
+mysqli_close($conn);
+?>

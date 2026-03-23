@@ -1,44 +1,63 @@
 <?php
+// =============================================
+// profile_update.php (API) - Update User Profile
+// =============================================
+// This file updates the logged-in user's profile
+// information (name, phone, city, blood group).
+// Email and password cannot be changed here.
+// =============================================
+
+// Tell the browser we are sending JSON data
 header('Content-Type: application/json');
-require_once __DIR__ . '/db.php';
+
+// Start session
 session_start();
 
-$input = json_decode(file_get_contents('php://input'), true);
-if (!$input) $input = $_POST;
+// Include database connection
+require_once __DIR__ . '/db.php';
 
+// ---- Step 1: Check if user is logged in ----
 if (empty($_SESSION['user_id'])) {
-    http_response_code(401);
     echo json_encode(['error' => 'Not authenticated']);
     exit;
 }
 
-if (empty($input['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $input['csrf_token'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid CSRF token']);
+// ---- Step 2: Get the data sent from the form ----
+$input = json_decode(file_get_contents('php://input'), true);
+if (!$input) {
+    $input = $_POST;
+}
+
+$name = $input['name'];
+$phone = $input['phone'];
+$city = $input['city'];
+$blood_group = $input['blood_group'];
+$user_id = $_SESSION['user_id'];
+
+// ---- Step 3: Validate required fields ----
+if (empty($name)) {
+    echo json_encode(['error' => 'Name is required']);
     exit;
 }
 
-$name = substr(trim($input['name'] ?? ''), 0, 150);
-$phone = substr(trim($input['phone'] ?? ''), 0, 50);
-$city = substr(trim($input['city'] ?? ''), 0, 100);
-$blood = substr(trim($input['blood_group'] ?? ''), 0, 10);
+// ---- Step 4: Update the user in the database ----
+$sql = "UPDATE users 
+        SET name='$name', phone='$phone', city='$city', blood_group='$blood_group' 
+        WHERE id='$user_id'";
+$result = mysqli_query($conn, $sql);
 
-if (!$name) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Name required']);
-    exit;
-}
+if ($result) {
+    // ---- Step 5: Fetch updated user data to send back ----
+    $sql2 = "SELECT id, name, email, phone, city, blood_group, created_at 
+             FROM users WHERE id='$user_id' LIMIT 1";
+    $result2 = mysqli_query($conn, $sql2);
+    $user = mysqli_fetch_assoc($result2);
 
-$pdo = get_db();
-try {
-    $stmt = $pdo->prepare('UPDATE users SET name = ?, phone = ?, city = ?, blood_group = ? WHERE id = ?');
-    $stmt->execute([$name, $phone, $city, $blood, $_SESSION['user_id']]);
-    $stmt = $pdo->prepare('SELECT id, name, email, phone, city, blood_group, created_at FROM users WHERE id = ? LIMIT 1');
-    $stmt->execute([$_SESSION['user_id']]);
-    $user = $stmt->fetch();
     echo json_encode(['ok' => true, 'user' => $user]);
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Server error']);
+} else {
+    echo json_encode(['error' => 'Update failed']);
 }
 
+// Close database connection
+mysqli_close($conn);
+?>

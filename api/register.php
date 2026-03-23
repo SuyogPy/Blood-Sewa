@@ -1,48 +1,77 @@
 <?php
+// =============================================
+// register.php (API) - Handles User Registration
+// =============================================
+// This file receives registration data from the
+// register form and inserts a new user into the
+// database. No password hashing is used (simple
+// plain text storage for school project).
+// =============================================
+
+// Tell the browser we are sending JSON data
 header('Content-Type: application/json');
-require_once __DIR__ . '/db.php';
+
+// Start session
 session_start();
 
+// Include database connection
+require_once __DIR__ . '/db.php';
+
+// ---- Step 1: Get the data sent from the form ----
 $input = json_decode(file_get_contents('php://input'), true);
-if (!$input) $input = $_POST;
+if (!$input) {
+    $input = $_POST;
+}
 
-// CSRF check
-if (empty($input['csrf_token']) || empty($_SESSION['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $input['csrf_token'])) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid CSRF token']);
+// Store form values in variables
+$name = $input['name'];
+$email = $input['email'];
+$password = $input['password'];       // Stored as plain text (no hashing)
+$phone = $input['phone'];
+$city = $input['city'];
+$blood_group = $input['blood_group'];
+
+// ---- Step 2: Basic Validation ----
+// Check if required fields are empty
+if (empty($name)) {
+    echo json_encode(['error' => 'Name is required']);
+    exit;
+}
+if (empty($email)) {
+    echo json_encode(['error' => 'Email is required']);
+    exit;
+}
+if (empty($password)) {
+    echo json_encode(['error' => 'Password is required']);
     exit;
 }
 
-$name = substr(trim($input['name'] ?? ''), 0, 150);
-$email = strtolower(trim($input['email'] ?? ''));
-$password = $input['password'] ?? '';
-$blood = substr(trim($input['blood_group'] ?? ''), 0, 10);
-$phone = substr(trim($input['phone'] ?? ''), 0, 50);
-$city = substr(trim($input['city'] ?? ''), 0, 100);
+// ---- Step 3: Check if email already exists ----
+$check_sql = "SELECT * FROM users WHERE email='$email'";
+$check_result = mysqli_query($conn, $check_sql);
 
-if (!$name || !$email || !$password) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Missing required fields']);
-    exit;
-}
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo json_encode(['error' => 'Invalid email']);
+if (mysqli_num_rows($check_result) > 0) {
+    // Email already registered
+    echo json_encode(['error' => 'Email already exists']);
     exit;
 }
 
-$pdo = get_db();
-try {
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    $stmt = $pdo->prepare('INSERT INTO users (name, email, password, phone, city, blood_group) VALUES (?, ?, ?, ?, ?, ?)');
-    $stmt->execute([$name, $email, $hash, $phone, $city, $blood]);
-    echo json_encode(['ok' => true, 'id' => $pdo->lastInsertId()]);
-} catch (PDOException $e) {
-    if ($e->getCode() === '23000') {
-        http_response_code(409);
-        echo json_encode(['error' => 'Email already exists']);
-    } else {
-        http_response_code(500);
-        echo json_encode(['error' => 'Server error']);
-    }
+// ---- Step 4: Insert new user into database ----
+$sql = "INSERT INTO users (name, email, password, phone, city, blood_group) 
+        VALUES ('$name', '$email', '$password', '$phone', '$city', '$blood_group')";
+
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    // Get the ID of the newly inserted user
+    $new_id = mysqli_insert_id($conn);
+    // Send success response
+    echo json_encode(['ok' => true, 'id' => $new_id]);
+} else {
+    // Something went wrong
+    echo json_encode(['error' => 'Registration failed. Please try again.']);
 }
+
+// Close database connection
+mysqli_close($conn);
+?>

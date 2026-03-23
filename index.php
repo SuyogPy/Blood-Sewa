@@ -1,3 +1,24 @@
+<?php
+// =============================================
+// index.php - Home Page
+// =============================================
+// Main landing page for Blood Sewa.
+// Shows hero section with donor count from
+// database (using PHP, not JavaScript).
+// =============================================
+
+// Include database connection
+require_once 'db.php';
+
+// ---- Get total number of donors from database ----
+$sql = "SELECT COUNT(*) AS total FROM users";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
+$donor_count = $row['total'];
+
+// Close connection
+mysqli_close($conn);
+?>
 <?php include 'header.php'; ?>
 <!doctype html>
 <html lang="en">
@@ -14,7 +35,11 @@
         <div class="hero-card">
           <div class="hero-logo"><img src="assets/logo.jpg" alt="BloodSewa logo"></div>
           <div style="display:flex; align-items:center; gap:10px; justify-content:center; flex-direction:column;">
-            <div class="live-stats"><span class="live-pulse" aria-hidden="true"></span>+1,240 Donors Registered</div>
+            <!-- Show live donor count from database using PHP -->
+            <div class="live-stats">
+              <span class="live-pulse" aria-hidden="true"></span>
+              +<?php echo $donor_count; ?> Donors Registered
+            </div>
             <h1 id="hero-heading" class="shimmer">Your Blood Can Save Three Lives</h1>
             <p class="lead">Join BloodSewa — a student-led initiative connecting compassionate donors with people in urgent need. Register as a donor and make a real impact today.</p>
 
@@ -31,11 +56,10 @@
               </div>
               <div>
                 <div style="display:flex;align-items:center;gap:8px">
-                  <div class="feature-title">Safe & Verified</div>
+                  <div class="feature-title">Safe &amp; Verified</div>
                   <div class="check-badge" aria-hidden="true">✔</div>
                 </div>
                 <div class="feature-desc feature-verify">We verify donor identities and contact details before listing — basic checks include email verification, phone confirmation, and profile review. This reduces risk and increases trust between donors and recipients.</div>
-                
               </div>
             </div>
 
@@ -74,7 +98,6 @@
     </div>
   </section>
 
-  <script src="assets/app.js"></script>
-<?php include 'footer.php'; ?>
+  <?php include 'footer.php'; ?>
 </body>
 </html>
